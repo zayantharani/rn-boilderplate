@@ -26,9 +26,9 @@ export default function ({ Colors, ...args }) {
         backgroundColor: Colors.inputBackground,
         color: Colors.text,
         minHeight: 50,
-        textAlign: 'center',
         marginTop: 10,
         marginBottom: 10,
+        padding: 10,
       },
     }),
   }

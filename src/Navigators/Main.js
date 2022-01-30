@@ -1,22 +1,18 @@
 import React from 'react'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
+import { createStackNavigator } from '@react-navigation/stack'
 import { SignInContainer } from '@/Containers'
+import RouteConstants from '@/Constants/RouteConstants'
+import FormContainer from '@/Containers/FormContainer'
 
-const Tab = createBottomTabNavigator()
+const Stack = createStackNavigator()
 
 // @refresh reset
 const MainNavigator = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen
-        name="Home"
-        component={SignInContainer}
-        options={{
-          tabBarIconStyle: { display: 'none' },
-          tabBarLabelPosition: 'beside-icon',
-        }}
-      />
-    </Tab.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name={RouteConstants.SIGNIN} component={SignInContainer} />
+      <Stack.Screen name={RouteConstants.FORMS} component={FormContainer} />
+    </Stack.Navigator>
   )
 }
 

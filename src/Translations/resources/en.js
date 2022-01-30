@@ -3,10 +3,16 @@ export default {
   actions: {
     continue: 'Continue',
   },
+  errors: {
+    emailInvalid: 'Email is invalid',
+    passwordInvalid: 'Password should be greater than 7 characters',
+  },
   signIn: {
-    desc: 'Enter your user id and password to proceed',
-    labels: {
-      userId: 'Enter a user id',
-    },
+    desc: 'Sign in',
+    email: 'Email',
+    password: 'Password',
+  },
+  form: {
+    desc: 'Please complete the form:',
   },
 }
