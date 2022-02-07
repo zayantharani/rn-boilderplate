@@ -4,13 +4,13 @@ import { View, Text, TouchableOpacity } from 'react-native'
 import { useTranslation } from 'react-i18next'
 import { Brand } from '@/Components'
 import { useTheme } from '@/Hooks'
-import { TEXT_INPUTS } from '@/Constants/AppConstants'
-import { Colors } from '@/Theme/Variables'
+import { AUTO_CAPITALIZE, TEXT_INPUTS } from '@/Constants/AppConstants'
 import { Icon } from 'react-native-elements/dist/icons/Icon'
-import { Input } from 'react-native-elements/dist/input/Input'
-import { navigate, navigateAndSimpleReset } from '@/Navigators/utils'
-import { Controller, useForm } from 'react-hook-form'
+import { navigateAndSimpleReset } from '@/Navigators/utils'
+import { useForm } from 'react-hook-form'
 import RouteConstants from '@/Constants/RouteConstants'
+import TextFeild from '@/Components/TextField'
+import { VALIDATION } from '@/Constants/ValidationConstants'
 
 const SignInContainer = () => {
   const { t } = useTranslation()
@@ -56,70 +56,46 @@ const SignInContainer = () => {
         {t('signIn.desc')}
       </Text>
       <View>
-        <Text style={[Fonts.textSmall]}>{t('signIn.email')}</Text>
-        <Controller
-          name={TEXT_INPUTS.EMAIL_ADDRESS}
+        <TextFeild
+          inputRef={emailAddressRef}
           control={control}
-          render={({ onChange, onBlur, value }) => (
-            <Input
-              ref={emailAddressRef}
-              value={value}
-              onBlur={onBlur}
-              textContentType="emailAddress"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              returnKeyType="next"
-              autoFocus={true}
-              onSubmitEditing={() => changeRef(TEXT_INPUTS.EMAIL_ADDRESS)}
-              onChangeText={onChange}
-              errorStyle={{ color: Colors.error }}
-              errorMessage={errors?.emailAddress?.message}
-            />
-          )}
-          rules={{
-            required: true,
-            pattern: {
-              value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-              message: t('errors.emailInvalid'),
-            },
-          }}
+          autoFocus={true}
           defaultValue=""
+          displayText={t('signIn.email')}
+          errorMessage={errors?.emailAddress ? t('errors.emailInvalid') : ''}
+          isRequired={true}
+          keyboardType="email-address"
+          textContentType="emailAddress"
+          onSubmitEditing={() => changeRef(TEXT_INPUTS.EMAIL_ADDRESS)}
+          keys={TEXT_INPUTS.EMAIL_ADDRESS}
+          validation={{ value: VALIDATION.EMAIL }}
+          autoCapitalize={AUTO_CAPITALIZE.NONE}
         />
       </View>
       <View>
-        <Text style={[Fonts.textSmall]}>{t('signIn.password')}</Text>
-        <Controller
-          name={TEXT_INPUTS.PASSWORD}
+        <TextFeild
+          inputRef={passwordRef}
           control={control}
-          render={({ onChange, onBlur, value }) => (
-            <Input
-              ref={passwordRef}
-              value={value}
-              onBlur={onBlur}
-              textContentType="password"
-              secureTextEntry={secureEntry}
-              autoCapitalize="none"
-              returnKeyType="done"
-              onChangeText={onChange}
-              onSubmitEditing={() => changeRef(TEXT_INPUTS.PASSWORD)}
-              rightIcon={
-                <Icon
-                  size={22}
-                  name={secureEntry ? 'md-eye-off' : 'md-eye'}
-                  type="ionicon"
-                  color="#2d2d2f"
-                  onPress={togglePasswordVisibility}
-                />
-              }
-              errorStyle={{ color: Colors.error }}
-              errorMessage={errors?.password ? t('errors.passwordInvalid') : ''}
-            />
-          )}
-          rules={{
-            required: true,
-            minLength: 8,
-          }}
+          autoFocus={false}
           defaultValue=""
+          displayText={t('signIn.password')}
+          errorMessage={errors?.password ? t('errors.passwordInvalid') : ''}
+          isRequired={true}
+          minLength={8}
+          textContentType="password"
+          secureTextEntry={secureEntry}
+          onSubmitEditing={() => changeRef(TEXT_INPUTS.PASSWORD)}
+          keys={TEXT_INPUTS.PASSWORD}
+          autoCapitalize={AUTO_CAPITALIZE.NONE}
+          rightIcon={
+            <Icon
+              size={22}
+              name={secureEntry ? 'md-eye-off' : 'md-eye'}
+              type="ionicon"
+              color="#2d2d2f"
+              onPress={togglePasswordVisibility}
+            />
+          }
         />
       </View>
 

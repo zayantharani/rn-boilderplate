@@ -1,5 +1,5 @@
 import React from 'react'
-import { ActivityIndicator, ScrollView, Text, View } from 'react-native'
+import { ScrollView, Text, View } from 'react-native'
 import { useTheme } from '@/Hooks'
 import { Brand } from '@/Components'
 import { Input } from 'react-native-elements/dist/input/Input'
