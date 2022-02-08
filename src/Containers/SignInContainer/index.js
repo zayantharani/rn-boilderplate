@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { View, Text, TouchableOpacity } from 'react-native'
 // import { useDispatch } from 'react-redux'
 import { useTranslation } from 'react-i18next'
@@ -11,6 +11,9 @@ import { useForm } from 'react-hook-form'
 import RouteConstants from '@/Constants/RouteConstants'
 import TextFeild from '@/Components/TextField'
 import { VALIDATION } from '@/Constants/ValidationConstants'
+import { useLazyFetchOneQuery } from '@/Services/modules/users'
+import Spinner from 'react-native-loading-spinner-overlay/lib'
+import { Colors, FontSize } from '@/Theme/Variables'
 
 const SignInContainer = () => {
   const { t } = useTranslation()
@@ -19,6 +22,10 @@ const SignInContainer = () => {
   const emailAddressRef = React.useRef(null)
   const passwordRef = React.useRef(null)
   const { Common, Fonts, Gutters, Layout } = useTheme()
+  const [
+    fetchOne,
+    { isLoading, isError, data, error, isSuccess },
+  ] = useLazyFetchOneQuery()
 
   // States
   const [secureEntry, setSecureEntry] = useState(true)
@@ -30,9 +37,14 @@ const SignInContainer = () => {
   }
 
   const signInPressed = ({ emailAddress, password }) => {
-    console.log(emailAddress, password)
-    navigateAndSimpleReset(RouteConstants.FORMS)
+    // navigateAndSimpleReset(RouteConstants.FORMS)
+    fetchOne(100)
   }
+
+  useEffect(() => {
+    console.log('Data', data, isSuccess)
+    console.log('Error', error, isError, isLoading)
+  }, [isSuccess, data, isError, error, isLoading])
 
   const changeRef = inputName => {
     switch (inputName) {
@@ -49,6 +61,7 @@ const SignInContainer = () => {
 
   return (
     <View style={[Layout.fill, Gutters.largeHPadding, Gutters.largeVPadding]}>
+      {isLoading && <Spinner visible={isLoading} />}
       <View style={Layout.colVCenter}>
         <Brand />
       </View>
@@ -98,6 +111,11 @@ const SignInContainer = () => {
           }
         />
       </View>
+      {isError && (
+        <Text style={[Colors.error, FontSize.regular]}>
+          {error.status.toString()}
+        </Text>
+      )}
 
       <TouchableOpacity
         style={[Common.button.rounded, Gutters.largeVMargin]}
