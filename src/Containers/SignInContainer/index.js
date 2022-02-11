@@ -11,26 +11,30 @@ import { useForm } from 'react-hook-form'
 import RouteConstants from '@/Constants/RouteConstants'
 import TextFeild from '@/Components/TextField'
 import { VALIDATION } from '@/Constants/ValidationConstants'
-import { useLazyFetchOneQuery } from '@/Services/modules/users'
 import Spinner from 'react-native-loading-spinner-overlay/lib'
 import { Colors, FontSize } from '@/Theme/Variables'
+import { useDispatch, useSelector } from 'react-redux'
+import { signInUser } from '@/Store/Actions/UserActions'
 
 const SignInContainer = () => {
   const { t } = useTranslation()
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
   const { handleSubmit, control, errors } = useForm()
   const emailAddressRef = React.useRef(null)
   const passwordRef = React.useRef(null)
   const { Common, Fonts, Gutters, Layout } = useTheme()
-  const [
-    fetchOne,
-    { isLoading, isError, data, error, isSuccess },
-  ] = useLazyFetchOneQuery()
 
   // States
   const [secureEntry, setSecureEntry] = useState(true)
 
   //Selectors
+  const userData = useSelector(state => state.user.userData)
+  const isLoading = useSelector(state => state.user.isLoading)
+  const error = useSelector(state => state.user.error)
+
+  useEffect(() => {
+    console.log('User data', userData)
+  }, [userData, error])
 
   const togglePasswordVisibility = () => {
     setSecureEntry(!secureEntry)
@@ -38,13 +42,8 @@ const SignInContainer = () => {
 
   const signInPressed = ({ emailAddress, password }) => {
     // navigateAndSimpleReset(RouteConstants.FORMS)
-    fetchOne(100)
+    dispatch(signInUser({ email: emailAddress, password }))
   }
-
-  useEffect(() => {
-    console.log('Data', data, isSuccess)
-    console.log('Error', error, isError, isLoading)
-  }, [isSuccess, data, isError, error, isLoading])
 
   const changeRef = inputName => {
     switch (inputName) {
@@ -111,7 +110,7 @@ const SignInContainer = () => {
           }
         />
       </View>
-      {isError && (
+      {error && (
         <Text style={[Colors.error, FontSize.regular]}>
           {error.status.toString()}
         </Text>

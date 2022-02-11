@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import { ActivityIndicator, View } from 'react-native'
 import { useTheme } from '@/Hooks'
 import { Brand } from '@/Components'
-import { setDefaultTheme } from '@/Store/Theme'
 import { navigateAndSimpleReset } from '@/Navigators/utils'
 import RouteConstants from '@/Constants/RouteConstants'
 
@@ -15,7 +14,6 @@ const StartupContainer = () => {
         resolve(true)
       }, 2000),
     )
-    await setDefaultTheme({ theme: 'default', darkMode: null })
     navigateAndSimpleReset(RouteConstants.MAIN)
   }
 
